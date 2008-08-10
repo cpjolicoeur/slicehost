@@ -1,0 +1,2 @@
+namespace :users do
+end
