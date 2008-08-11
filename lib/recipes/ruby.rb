@@ -1,4 +1,9 @@
+# TODO: Automatically determine these values
+set :ruby_enterprise_version, "ruby-enterprise-1.8.6-20080810"
+set :passenger_version, "2.0.3"
+
 namespace :ruby do
+  desc "Install Ruby 1.8"
   task :setup_18, :roles => :app do
     sudo "aptitude install -y ruby1.8-dev ruby1.8 ri1.8 rdoc1.8 irb1.8 libreadline-ruby1.8 libruby1.8 libopenssl-ruby sqlite3 libsqlite3-ruby1.8"
 
@@ -8,22 +13,27 @@ namespace :ruby do
     sudo "ln -s /usr/bin/irb1.8 /usr/bin/irb"
   end
 
-  task :install_ree, :roles => :app do
-    run "wget http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.6-20080810.tar.gz"
-    run "tar xzvf ruby-enterprise-1.8.6-20080810.tar.gz"
-    # sudo "./ruby-enterprise-1.8.6-20080810/installer"
+  desc "Install Ruby Enterpise Edition"
+  task :install_enterprise, :roles => :app do
+    run "wget -q http://rubyforge.org/frs/download.php/41040/#{ruby_enterprise_version}.tar.gz"
+    run "tar xzvf -q #{ruby_enterprise_version}.tar.gz"
+    run "rm ruby-enterprise-1.8.6-20080810.tar.gz"
+    # sudo "./#{ruby_enterprise_version}/installer"
 
-    # sudo "ln -sf /opt/ruby-enterprise-1.8.6-20080810/bin/ruby /usr/bin/ruby"
-    # sudo "ln -sf /opt/ruby-enterprise-1.8.6-20080810/bin/ri /usr/bin/ri"
-    # sudo "ln -sf /opt/ruby-enterprise-1.8.6-20080810/bin/rdoc /usr/bin/rdoc"
-    # sudo "ln -sf /opt/ruby-enterprise-1.8.6-20080810/bin/irb /usr/bin/irb"
-    # sudo "ln -sf /opt/ruby-enterprise-1.8.6-20080810/bin/rake /usr/bin/rake"
+    sudo "rm -rf #{ruby_enterprise_version}/"
+
+    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/ruby /usr/bin/ruby"
+    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/ri /usr/bin/ri"
+    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/rdoc /usr/bin/rdoc"
+    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/irb /usr/bin/irb"
+    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/rake /usr/bin/rake"
   end
 
+  desc "Install Phusion Passenger"
   task :install_passenger, :roles => :app do
     sudo "apt-get install apache2-mpm-prefork"
-    # sudo "/opt/ruby-enterprise-1.8.6-20080810/bin/ruby /opt/ruby-enterprise-1.8.6-20080810/bin/gem install install passenger"
-    # sudo "/opt/ruby-enterprise-1.8.6-20080810/bin/ruby /opt/ruby-enterprise-1.8.6-20080810/bin/passenger-install-apache2-module"
+    # sudo "/opt/#{ruby_enterprise_version}/bin/ruby /opt/#{ruby_enterprise_version}/bin/gem install install passenger"
+    # sudo "/opt/#{ruby_enterprise_version}/bin/ruby /opt/#{ruby_enterprise_version}/bin/passenger-install-apache2-module"
 
     put render("passenger.load", binding), "/home/#{user}/passenger.load"
     put render("passenger.config", binding), "/home/#{user}/passenger.config"
