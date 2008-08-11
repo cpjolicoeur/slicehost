@@ -1,1 +1,1 @@
-Dir["#{File.dirname(__FILE__)}/lib/**/*.rb"].each { |lib| load(lib) }
+Dir["#{File.dirname(__FILE__)}/recipes/*.rb"].each { |lib| load(lib) }
