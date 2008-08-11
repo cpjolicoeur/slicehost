@@ -1,5 +1,5 @@
 namespace :ruby do
-  task :setup_18 do
+  task :setup_18, :roles => :app do
     sudo "aptitude install -y ruby1.8-dev ruby1.8 ri1.8 rdoc1.8 irb1.8 libreadline-ruby1.8 libruby1.8 libopenssl-ruby sqlite3 libsqlite3-ruby1.8"
 
     sudo "ln -s /usr/bin/ruby1.8 /usr/bin/ruby"
@@ -8,7 +8,7 @@ namespace :ruby do
     sudo "ln -s /usr/bin/irb1.8 /usr/bin/irb"
   end
 
-  task :install_ree do
+  task :install_ree, :roles => :app do
     run "wget http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.6-20080810.tar.gz"
     run "tar xzvf ruby-enterprise-1.8.6-20080810.tar.gz"
     # sudo "./ruby-enterprise-1.8.6-20080810/installer"
@@ -20,7 +20,7 @@ namespace :ruby do
     # sudo "ln -sf /opt/ruby-enterprise-1.8.6-20080810/bin/rake /usr/bin/rake"
   end
 
-  task :install_passenger do
+  task :install_passenger, :roles => :app do
     sudo "apt-get install apache2-mpm-prefork"
     # sudo "/opt/ruby-enterprise-1.8.6-20080810/bin/ruby /opt/ruby-enterprise-1.8.6-20080810/bin/gem install install passenger"
     # sudo "/opt/ruby-enterprise-1.8.6-20080810/bin/ruby /opt/ruby-enterprise-1.8.6-20080810/bin/passenger-install-apache2-module"
