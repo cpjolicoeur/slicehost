@@ -1,5 +1,5 @@
 namespace :iptables do
-  task :configure do
+  task :configure, :roles => :gateway do
     put render("iptables", binding), "/home/#{user}/iptables.up.rules"
     sudo "mv ~/iptables.up.rules /etc/iptables.up.rules"
     run %(cat /etc/network/interfaces |
