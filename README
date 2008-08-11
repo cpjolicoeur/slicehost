@@ -1,0 +1,15 @@
+Slicehost Recipes
+=================
+
+Slicehost Capistrano recipes for configuring and managing your slice.
+
+
+Example
+=======
+
+The recipes are designed to work stand alone apart from the standard set of Capistrano deploy recipes.
+
+  cap -f slicehost.rb
+
+
+Copyright (c) 2007 Joshua Peek, released under the MIT license
