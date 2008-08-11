@@ -1,17 +1,17 @@
 ssh_options = { :keys => [File.expand_path("~/.ssh/id_dsa")], :port => 22 }
 
 namespace :ssh do
-  task :reload do
+  task :reload, :roles => :gateway do
     sudo "/etc/init.d/ssh reload"
   end
 
-  task :configure do
+  task :configure, :roles => :gateway do
     upload_keys
     configure_sshd
     reload
   end
 
-  task :upload_keys do
+  task :upload_keys, :roles => :gateway do
     run "mkdir -p ~/.ssh"
     run "chown -R #{user}:#{user} ~/.ssh"
     run "chmod 700 ~/.ssh"
@@ -20,7 +20,7 @@ namespace :ssh do
     put authorized_keys, "/home/#{user}/.ssh/authorized_keys", :mode => 0600
   end
 
-  task :configure_sshd do
+  task :configure_sshd, :roles => :gateway do
     put render("sshd_config", binding), "/home/#{user}/sshd_config"
     sudo "mv /home/#{user}/sshd_config /etc/ssh/sshd_config"
   end
