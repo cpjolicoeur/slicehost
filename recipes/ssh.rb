@@ -1,15 +1,18 @@
 ssh_options = { :keys => [File.expand_path("~/.ssh/id_dsa")], :port => 22 }
 
 namespace :ssh do
+  desc <<-DESC
+    Reload SSH service.
+  DESC
   task :reload, :roles => :gateway do
     sudo "/etc/init.d/ssh reload"
   end
 
   desc <<-DESC
-    Configure SSH on the gateway host. Runs `upload_keys` and `configure_sshd` \
+    Setup SSH on the gateway host. Runs `upload_keys` and `configure_sshd` \
     then reloads the SSH service to finalize the changes.
   DESC
-  task :configure, :roles => :gateway do
+  task :setup, :roles => :gateway do
     upload_keys
     configure_sshd
     reload
@@ -27,7 +30,7 @@ namespace :ssh do
     run "chmod 700 ~/.ssh"
 
     authorized_keys = ssh_options[:keys].collect { |key| File.read("#{key}.pub") }.join("\n")
-    put authorized_keys, "/home/#{user}/.ssh/authorized_keys", :mode => 0600
+    put authorized_keys, "./.ssh/authorized_keys", :mode => 0600
   end
 
   desc <<-DESC
@@ -38,7 +41,7 @@ namespace :ssh do
     reload the SSH service with `cap ssh:reload`.
   DESC
   task :configure_sshd, :roles => :gateway do
-    put render("sshd_config", binding), "/home/#{user}/sshd_config"
-    sudo "mv /home/#{user}/sshd_config /etc/ssh/sshd_config"
+    put render("sshd_config", binding), "sshd_config"
+    sudo "mv sshd_config /etc/ssh/sshd_config"
   end
 end

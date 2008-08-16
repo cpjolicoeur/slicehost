@@ -1,6 +1,6 @@
 namespace :slice do
   task :configure do
-    ssh.configure
+    ssh.setup
     iptables.configure
     aptitude.setup
   end
