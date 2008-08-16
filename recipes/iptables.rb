@@ -1,6 +1,9 @@
 namespace :iptables do
   desc <<-DESC
     Harden iptables configuration. Only allows ssh, http, and https connections.
+
+    See "iptables" section on \
+    http://articles.slicehost.com/2008/4/25/ubuntu-hardy-setup-page-1
   DESC
   task :configure, :roles => :gateway do
     put render("iptables", binding), "iptables.up.rules"

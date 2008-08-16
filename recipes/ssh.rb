@@ -23,6 +23,9 @@ namespace :ssh do
     one does not already exist. The SSH keys default to the ones set in \
     Capistrano's ssh_options. You can change this by setting ssh_options[:keys] = \
     ["/home/user/.ssh/id_dsa"].
+
+    See "SSH copy" and "SSH Permissions" sections on \
+    http://articles.slicehost.com/2008/4/25/ubuntu-hardy-setup-page-1
   DESC
   task :upload_keys, :roles => :gateway do
     run "mkdir -p ~/.ssh"
@@ -39,6 +42,9 @@ namespace :ssh do
     This defaults to the standard SSH port 22. You can change this by setting \
     ssh_options[:port] = 3000. Note that this change will not take affect until \
     reload the SSH service with `cap ssh:reload`.
+
+    See "SSH config" section on \
+    http://articles.slicehost.com/2008/4/25/ubuntu-hardy-setup-page-1
   DESC
   task :configure_sshd, :roles => :gateway do
     put render("sshd_config", binding), "sshd_config"
