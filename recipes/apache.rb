@@ -1,3 +1,7 @@
+set(:domain) do
+  Capistrano::CLI.ui.ask "Which domain should we use? "
+end
+
 namespace :apache do
   desc "Restarts Apache webserver"
   task :restart, :roles => :web do
@@ -70,5 +74,11 @@ namespace :apache do
     mod = Capistrano::CLI.ui.ask("Which module should we enable: ")
     sudo "sudo a2enmod #{mod}"
     force_reload
+  end
+
+  desc "Upload Apache virtual host"
+  task :upload_vhost, :roles => :web do
+    put render("vhost", binding), "/home/#{user}/#{application}"
+    sudo "mv /home/#{user}/#{application} /etc/apache2/sites-available/#{application}"
   end
 end
