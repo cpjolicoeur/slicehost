@@ -78,7 +78,7 @@ namespace :apache do
 
   desc "Upload Apache virtual host"
   task :upload_vhost, :roles => :web do
-    put render("vhost", binding), "/home/#{user}/#{application}"
-    sudo "mv /home/#{user}/#{application} /etc/apache2/sites-available/#{application}"
+    put render("vhost", binding), application
+    sudo "mv #{application} /etc/apache2/sites-available/#{application}"
   end
 end
