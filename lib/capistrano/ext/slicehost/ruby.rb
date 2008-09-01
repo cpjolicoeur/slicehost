@@ -15,25 +15,19 @@ namespace :ruby do
 
   desc "Install Ruby Enterpise Edition"
   task :install_enterprise, :roles => :app do
+    run "test ! -d /opt/#{ruby_enterprise_version}"
     run "wget -q http://rubyforge.org/frs/download.php/41040/#{ruby_enterprise_version}.tar.gz"
     run "tar xzvf #{ruby_enterprise_version}.tar.gz"
     run "rm #{ruby_enterprise_version}.tar.gz"
     sudo "./#{ruby_enterprise_version}/installer --auto /opt/#{ruby_enterprise_version}"
-
     sudo "rm -rf #{ruby_enterprise_version}/"
-
-    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/ruby /usr/bin/ruby"
-    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/ri /usr/bin/ri"
-    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/rdoc /usr/bin/rdoc"
-    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/irb /usr/bin/irb"
-    sudo "ln -sf /opt/#{ruby_enterprise_version}/bin/rake /usr/bin/rake"
   end
 
   desc "Install Phusion Passenger"
   task :install_passenger, :roles => :app do
     sudo "apt-get install apache2-mpm-prefork"
     sudo "/opt/#{ruby_enterprise_version}/bin/ruby /opt/#{ruby_enterprise_version}/bin/gem install install passenger"
-    # sudo "/opt/#{ruby_enterprise_version}/bin/ruby /opt/#{ruby_enterprise_version}/bin/passenger-install-apache2-module"
+    sudo "/opt/#{ruby_enterprise_version}/bin/ruby /opt/#{ruby_enterprise_version}/bin/passenger-install-apache2-module"
 
     put render("passenger.load", binding), "/home/#{user}/passenger.load"
     put render("passenger.config", binding), "/home/#{user}/passenger.config"
