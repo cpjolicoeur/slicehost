@@ -14,6 +14,20 @@ namespace :mysql do
     sudo "/etc/init.d/mysql stop"
   end
 
+  desc "Export MySQL database"
+  task :export, :roles => :db do
+    database = Capistrano::CLI.ui.ask("Which database should we export: ")
+    sudo "mysqldump -u root -p #{database} > #{database}.sql"
+  end
+
+  desc "Import MySQL database"
+  task :export, :roles => :db do
+    database = Capistrano::CLI.ui.ask("Which database should we create: ")
+    file = Capistrano::CLI.ui.ask("Which database file should we import: ")
+    sudo "mysqladmin -u root -p create #{database}"
+    sudo "mysql -u root -p #{database} < #{file}"
+  end
+
   desc "Install MySQL"
   task :install, :roles => :db do
     sudo "aptitude install -y mysql-server mysql-client libmysqlclient15-dev"
