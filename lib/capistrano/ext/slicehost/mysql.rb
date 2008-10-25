@@ -21,7 +21,7 @@ namespace :mysql do
   end
 
   desc "Import MySQL database"
-  task :export, :roles => :db do
+  task :import, :roles => :db do
     database = Capistrano::CLI.ui.ask("Which database should we create: ")
     file = Capistrano::CLI.ui.ask("Which database file should we import: ")
     sudo "mysqladmin -u root -p create #{database}"
